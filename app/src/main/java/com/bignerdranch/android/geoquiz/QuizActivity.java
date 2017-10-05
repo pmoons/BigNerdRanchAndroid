@@ -28,6 +28,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private int mNumCorrect = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,10 @@ public class QuizActivity extends AppCompatActivity {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
                 enableChoiceButtons(true);
+
+                if (mCurrentIndex == 0) {
+                    displayResults();
+                }
             }
         });
 
@@ -88,11 +93,18 @@ public class QuizActivity extends AppCompatActivity {
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
+            mNumCorrect++;
         } else {
             messageResId = R.string.incorrect_toast;
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void displayResults() {
+        Integer percentCorrect = mNumCorrect / mQuestionBank.length;
+        String message = getString(R.string.results, percentCorrect);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
